@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Register — Dukaan Khata</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #16213E;
+      --ink-2: #1F2C4F;
+      --paper: #FAF7F0;
+      --paper-2: #F1ECE0;
+      --marigold: #F4A300;
+      --marigold-dark: #C97F00;
+      --ledger-green: #2F6F4E;
+      --ledger-green-soft: #E4EFE8;
+      --brick: #B23A48;
+      --brick-soft: #F6E3E3;
+      --charcoal: #23262B;
+      --line: rgba(22,33,62,0.14);
+      --shadow: 0 16px 36px rgba(22,33,62,0.08);
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--paper);
+      color: var(--charcoal);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(700px 400px at 80% -10%, rgba(244,163,0,0.12), transparent 70%),
+        radial-gradient(600px 350px at 15% 100%, rgba(47,111,78,0.08), transparent 60%),
+        var(--paper);
+    }
+
+    .brand-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .brand-mark {
+      width: 42px; height: 42px; border-radius: 9px;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--marigold); font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px;
+    }
+    .brand-name { font-family: 'Fraunces', serif; font-weight: 700; font-size: 24px; letter-spacing: -0.01em; }
+    .brand-name span { color: var(--marigold-dark); }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 460px;
+      padding: 34px 30px;
+    }
+
+    .role-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--paper-2);
+      padding: 5px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+    .role-btn {
+      border: none;
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .2s ease;
+    }
+    .role-btn.active {
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: 0 2px 8px rgba(22,33,62,0.15);
+    }
+
+    .tab-head {
+      display: flex;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+    .tab-item {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #7b8089;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all .15s ease;
+    }
+    .tab-item.active {
+      color: var(--ink);
+      border-bottom-color: var(--marigold-dark);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-family: 'Inter', sans-serif;
+      background: var(--paper);
+      color: var(--charcoal);
+      transition: border-color .15s ease;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--ink);
+      background: #fff;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      transition: background .15s ease, transform .1s ease;
+    }
+    .btn-submit:hover {
+      background: #0d152a;
+      transform: translateY(-1px);
+    }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .demo-box {
+      margin-top: 20px;
+      padding: 12px 14px;
+      background: var(--paper-2);
+      border-radius: 8px;
+      border: 1px dashed var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .demo-text {
+      font-size: 12px;
+      color: #555b66;
+    }
+    .demo-text strong {
+      color: var(--ink);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .btn-quick {
+      background: transparent;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-quick:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .alert {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      margin-bottom: 18px;
+      display: none;
+      line-height: 1.5;
+    }
+    .alert-error {
+      background: var(--brick-soft);
+      color: var(--brick);
+      border: 1px solid rgba(178,58,72,0.25);
+    }
+    .alert-success {
+      background: var(--ledger-green-soft);
+      color: var(--ledger-green);
+      border: 1px solid rgba(47,111,78,0.25);
+    }
+
+    .redirect-link-wrap {
+      margin-top: 12px;
+      text-align: center;
+      display: none;
+    }
+    .redirect-link-wrap a {
+      font-size: 14px;
+      color: var(--ledger-green);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      font-size: 13px;
+      color: #666;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-top" onclick="goToWebsite()">
+    <div class="brand-mark">DK</div>
+    <div class="brand-name">Dukaan <span>Khata</span></div>
+  </div>
+
+  <div class="card">
+    <!-- Role Switcher: Owner vs Customer -->
+    <div class="role-switcher">
+      <button type="button" class="role-btn active" id="btnRoleOwner" onclick="setRole('owner')">
+        🏪 Shop Owner
+      </button>
+      <button type="button" class="role-btn" id="btnRoleCustomer" onclick="setRole('customer')">
+        🛒 Customer
+      </button>
+    </div>
+
+    <!-- Mode Switcher: Login vs Register -->
+    <div class="tab-head">
+      <div class="tab-item active" id="tabLogin" onclick="setMode('login')">Sign In</div>
+      <div class="tab-item" id="tabRegister" onclick="setMode('register')">Create Account</div>
+    </div>
+
+    <!-- Feedback Message Alert -->
+    <div id="alertBox" class="alert"></div>
+
+    <!-- Direct click link if auto-redirect is delayed -->
+    <div id="redirectWrap" class="redirect-link-wrap">
+      <a id="redirectManualLink" href="#">👉 Click here if not redirected automatically</a>
+    </div>
+
+    <!-- Main Auth Form -->
+    <form id="authForm" onsubmit="handleAuthSubmit(event)">
+      <!-- Name field (Register only) -->
+      <div class="form-group" id="groupName" style="display: none;">
+        <label for="inputName">Full Name</label>
+        <input type="text" id="inputName" placeholder="e.g. Ramesh Sharma">
+      </div>
+
+      <!-- Shop Name field (Owner Register only) -->
+      <div class="form-group" id="groupShopName" style="display: none;">
+        <label for="inputShopName">Shop / Business Name</label>
+        <input type="text" id="inputShopName" placeholder="e.g. Sharma General Store">
+      </div>
+
+      <!-- Phone field (Register only) -->
+      <div class="form-group" id="groupPhone" style="display: none;">
+        <label for="inputPhone">Phone Number (Optional)</label>
+        <input type="tel" id="inputPhone" placeholder="e.g. 9876543210">
+      </div>
+
+      <!-- Email field (Always) -->
+      <div class="form-group">
+        <label for="inputEmail">Email Address</label>
+        <input type="email" id="inputEmail" placeholder="name@example.com" required>
+      </div>
+
+      <!-- Password field (Always) -->
+      <div class="form-group">
+        <label for="inputPassword">Password</label>
+        <input type="password" id="inputPassword" placeholder="••••••••" required minlength="6">
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSubmit">
+        <span id="submitText">Sign In as Shop Owner</span>
+      </button>
+    </form>
+
+    <!-- Quick 1-Click Demo Account Login helper -->
+    <div class="demo-box" id="demoBox">
+      <div class="demo-text">
+        <span id="demoLabel">Owner Demo:</span> <strong id="demoCred">owner@sharma.com</strong>
+      </div>
+      <button type="button" class="btn-quick" onclick="fillDemoCredentials()">Auto Fill</button>
+    </div>
+
+    <a href="#" onclick="goToWebsite(); return false;" class="back-link">← Continue as guest to explore stock</a>
+  </div>
+
+  <script>
+    function getApiBase() {
+      if (window.location.protocol.startsWith('http') && (window.location.port === '5000' || window.location.port === '')) {
+        return '';
+      }
+      return 'http://localhost:5000';
+    }
+
+    const API_BASE = getApiBase();
+    let currentRole = 'owner';
+    let currentMode = 'login';
+
+    function getTargetUrl(view = '') {
+      const v = view ? `?view=${view}` : '';
+      if (window.location.protocol.startsWith('http')) {
+        return `/index.html${v}`;
+      }
+      return `index.html${v}`;
+    }
+
+    function goToWebsite() {
+      window.location.href = getTargetUrl(currentRole);
+    }
+
+    function showAlert(message, isError = true) {
+      const el = document.getElementById('alertBox');
+      el.className = 'alert ' + (isError ? 'alert-error' : 'alert-success');
+      el.innerHTML = message;
+      el.style.display = 'block';
+    }
+
+    function hideAlert() {
+      document.getElementById('alertBox').style.display = 'none';
+      document.getElementById('redirectWrap').style.display = 'none';
+    }
+
+    function setRole(role) {
+      currentRole = role;
+      document.getElementById('btnRoleOwner').classList.toggle('active', role === 'owner');
+      document.getElementById('btnRoleCustomer').classList.toggle('active', role === 'customer');
+      updateUI();
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
+      document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
+      updateUI();
+    }
+
+    function updateUI() {
+      hideAlert();
+      const isRegister = (currentMode === 'register');
+      const isOwner = (currentRole === 'owner');
+
+      document.getElementById('groupName').style.display = isRegister ? 'block' : 'none';
+      document.getElementById('groupPhone').style.display = isRegister ? 'block' : 'none';
+      document.getElementById('groupShopName').style.display = (isRegister && isOwner) ? 'block' : 'none';
+
+      const roleTitle = isOwner ? 'Shop Owner' : 'Customer';
+      document.getElementById('submitText').textContent = isRegister 
+        ? `Create ${roleTitle} Account` 
+        : `Sign In as ${roleTitle}`;
+
+      const demoBox = document.getElementById('demoBox');
+      if (currentMode === 'login') {
+        demoBox.style.display = 'flex';
+        if (isOwner) {
+          document.getElementById('demoLabel').textContent = 'Owner Demo:';
+          document.getElementById('demoCred').textContent = 'owner@sharma.com';
+        } else {
+          document.getElementById('demoLabel').textContent = 'Customer Demo:';
+          document.getElementById('demoCred').textContent = 'customer@gmail.com';
+        }
+      } else {
+        demoBox.style.display = 'none';
+      }
+    }
+
+    function fillDemoCredentials() {
+      if (currentRole === 'owner') {
+        document.getElementById('inputEmail').value = 'owner@sharma.com';
+        document.getElementById('inputPassword').value = 'password123';
+      } else {
+        document.getElementById('inputEmail').value = 'customer@gmail.com';
+        document.getElementById('inputPassword').value = 'password123';
+      }
+      hideAlert();
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      hideAlert();
+
+      const email = document.getElementById('inputEmail').value.trim();
+      const password = document.getElementById('inputPassword').value;
+      const btn = document.getElementById('btnSubmit');
+      const submitText = document.getElementById('submitText');
+
+      const endpoint = `${API_BASE}/api/auth/${currentMode === 'login' ? 'login' : 'register'}`;
+      
+      const payload = {
+        email,
+        password,
+        role: currentRole
+      };
+
+      if (currentMode === 'register') {
+        payload.name = document.getElementById('inputName').value.trim();
+        payload.phone = document.getElementById('inputPhone').value.trim();
+        if (currentRole === 'owner') {
+          payload.shopName = document.getElementById('inputShopName').value.trim() || `${payload.name}'s Shop`;
+        }
+        if (!payload.name) {
+          showAlert('Please enter your full name.');
+          return;
+        }
+      }
+
+      try {
+        btn.disabled = true;
+        submitText.textContent = currentMode === 'login' ? 'Signing in…' : 'Creating account…';
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Authentication failed. Please verify credentials.');
+        }
+
+        // Store JWT token and user info
+        localStorage.setItem('dukaan_token', data.token);
+        localStorage.setItem('dukaan_user', JSON.stringify(data.user));
+
+        const targetView = (data.user.role === 'owner') ? 'owner' : 'customer';
+        const destinationUrl = getTargetUrl(targetView);
+
+        showAlert(
+          `✅ <strong>Success!</strong> Welcome, ${data.user.name}. Redirecting you to the website now…`,
+          false
+        );
+
+        const redirectWrap = document.getElementById('redirectWrap');
+        const redirectLink = document.getElementById('redirectManualLink');
+        redirectLink.href = destinationUrl;
+        redirectWrap.style.display = 'block';
+
+        setTimeout(() => {
+          window.location.href = destinationUrl;
+        }, 600);
+
+      } catch (err) {
+        showAlert(`⚠️ ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        updateUI();
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('role') === 'customer') {
+      setRole('customer');
+    }
+  </script>
+</body>
+</html>
